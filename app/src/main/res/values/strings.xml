@@ -1,3 +1,13 @@
 <resources>
-    <string name="app_name">DiaDeAndalucia</string>
+    <string name="app_name">App Día de Andalucía</string>
+
+    <string name="navigation_drawer_open">Abrir menú de navegación</string>
+    <string name="navigation_drawer_close">Cerrar menú de navegación</string>
+
+    <string name="menu_personajes">Personajes Ilustres</string>
+    <string name="menu_videos">Andalucía en Vídeo</string>
+    <string name="menu_sonidos">Sonidos de Andalucía</string>
+    <string name="menu_animaciones">Animando Andalucía</string>
+
+    <string name="welcome_message">¡Bienvenidos a la celebración del Día de Andalucía!</string>
 </resources>

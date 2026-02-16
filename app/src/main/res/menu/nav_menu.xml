@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_personajes"
+        android:icon="@drawable/dragonite_betis"
+        android:title="@string/menu_personajes" />
+    <item
+        android:id="@+id/nav_videos"
+        android:icon="@android:drawable/ic_menu_slideshow"
+        android:title="@string/menu_videos" />
+    <item
+        android:id="@+id/nav_sonidos"
+        android:icon="@android:drawable/ic_lock_silent_mode_off"
+        android:title="@string/menu_sonidos" />
+    <item
+        android:id="@+id/nav_animaciones"
+        android:icon="@android:drawable/ic_menu_compass"
+        android:title="@string/menu_animaciones" />
+</menu>

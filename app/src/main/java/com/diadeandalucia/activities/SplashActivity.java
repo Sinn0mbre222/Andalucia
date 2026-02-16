@@ -1,10 +1,12 @@
-package com.diadeandalucia;
+package com.diadeandalucia.activities;
 
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler; // Importante añadir esto
 import android.widget.VideoView;
 import androidx.appcompat.app.AppCompatActivity;
+import com.diadeandalucia.R;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -14,18 +16,16 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
 
         VideoView videoView = findViewById(R.id.videoViewSplash);
-
-        // Configuramos la ruta del video que acabas de pegar en raw
         String path = "android.resource://" + getPackageName() + "/" + R.raw.splash_video;
         videoView.setVideoURI(Uri.parse(path));
+        videoView.start();
 
-        // Cuando el video termine, pasamos a la MainActivity
-        videoView.setOnCompletionListener(mp -> {
+        // ESTO BAJA EL TIEMPO:
+        // Pasamos a MainActivity tras 2000 milisegundos (2 segundos)
+        new Handler().postDelayed(() -> {
             Intent intent = new Intent(SplashActivity.this, MainActivity.class);
             startActivity(intent);
-            finish(); // Cerramos la splash para que no se pueda volver atrás
-        });
-
-        videoView.start();
+            finish();
+        }, 2000);
     }
 }
