@@ -1,16 +1,19 @@
 package com.diadeandalucia.fragments;
 
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.MediaController;
-import android.widget.VideoView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import com.diadeandalucia.R;
+import com.diadeandalucia.adapters.VideoAdapter;
+import com.diadeandalucia.models.Video;
+import java.util.ArrayList;
+import java.util.List;
 
 public class VideosFragment extends Fragment {
 
@@ -19,21 +22,17 @@ public class VideosFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_videos, container, false);
 
-        setupVideo(view.findViewById(R.id.videoView1), R.raw.splash_video);
-        setupVideo(view.findViewById(R.id.videoView2), R.raw.quemequedosincomer);
-        setupVideo(view.findViewById(R.id.videoView3), R.raw.elriounamierda);
+        RecyclerView rv = view.findViewById(R.id.rvVideos);
+        rv.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        List<Video> lista = new ArrayList<>();
+        lista.add(new Video("Viva Andalucía", R.raw.splash_video));
+        lista.add(new Video("Problemas de Andalucía", R.raw.quemequedosincomer));
+        lista.add(new Video("Lugares de Andalucía", R.raw.elriounamierda));
+
+        VideoAdapter adapter = new VideoAdapter(lista);
+        rv.setAdapter(adapter);
 
         return view;
-    }
-
-    private void setupVideo(VideoView videoView, int videoResId) {
-        // Ruta del recurso
-        String path = "android.resource://" + requireContext().getPackageName() + "/" + videoResId;
-        videoView.setVideoURI(Uri.parse(path));
-
-        // Añadir controles multimedia (Play, Pause, etc.) como pide el PDF
-        MediaController mediaController = new MediaController(getContext());
-        mediaController.setAnchorView(videoView);
-        videoView.setMediaController(mediaController);
     }
 }
