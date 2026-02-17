@@ -4,8 +4,8 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import com.diadeandalucia.R;
+import com.diadeandalucia.fragments.AnimacionesFragment;
 import com.diadeandalucia.fragments.PersonajesFragment;
-// Importa los demás fragments aquí...
 import com.diadeandalucia.fragments.SonidosFragment;
 import com.diadeandalucia.fragments.VideosFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
             } else if (id == R.id.nav_sonidos) {
                  selectedFragment = new SonidosFragment();
             } else if (id == R.id.nav_animaciones) {
-                // selectedFragment = new AnimacionesFragment();
+                selectedFragment = new AnimacionesFragment();
             }
 
             if (selectedFragment != null) {
