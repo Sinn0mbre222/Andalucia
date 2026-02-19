@@ -9,9 +9,9 @@
     android:padding="24dp">
 
     <ImageView
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:src="@drawable/dragonite_betis"
+        android:layout_width="180dp"
+        android:layout_height="180dp"
+        android:src="@drawable/dragonite_musica"
         android:layout_marginBottom="10dp" />
 
     <TextView
@@ -42,7 +42,7 @@
     <Button
         android:id="@+id/btnSonido3"
         style="@style/BotonAndaluzPro"
-        android:text="Mussho Beti' (Guerda)" />
+        android:text="Mussho Beti' (Er mejoh)" />
 
     <Button
         android:id="@+id/btnSonido4"

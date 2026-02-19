@@ -29,6 +29,7 @@ public class VideosFragment extends Fragment {
         lista.add(new Video("Viva Andalucía", R.raw.splash_video));
         lista.add(new Video("Problemas de Andalucía", R.raw.quemequedosincomer));
         lista.add(new Video("Lugares de Andalucía", R.raw.elriounamierda));
+        lista.add(new Video("Betis libre", R.raw.lopera));
 
         VideoAdapter adapter = new VideoAdapter(lista);
         rv.setAdapter(adapter);
