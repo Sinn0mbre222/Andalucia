@@ -9,7 +9,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Personajes Ilustres"
+        android:text="Cultura en Vídeo"
         android:textSize="24sp"
         android:textStyle="bold"
         android:textColor="#006241"
@@ -18,9 +18,10 @@
         android:paddingBottom="10dp"/>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerPersonajes"
+        android:id="@+id/rvVideos"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
         android:paddingHorizontal="12dp"
-        android:paddingBottom="80dp" /> </LinearLayout>
+        android:paddingBottom="80dp" />
+</LinearLayout>

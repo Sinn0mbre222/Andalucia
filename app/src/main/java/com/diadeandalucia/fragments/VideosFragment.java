@@ -20,18 +20,23 @@ public class VideosFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        // Asegúrate de inflar el layout de vídeos
         View view = inflater.inflate(R.layout.fragment_videos, container, false);
 
-        RecyclerView rv = view.findViewById(R.id.recyclerPersonajes);
-        rv.setLayoutManager(new LinearLayoutManager(getContext()));
+        // CORRECCIÓN: Usamos el ID que pusimos en fragment_videos.xml
+        RecyclerView rv = view.findViewById(R.id.rvVideos);
 
-        List<Video> lista = new ArrayList<>();
-        lista.add(new Video("Viva Andalucía", R.raw.splash_video));
-        lista.add(new Video("Problemas de Andalucía", R.raw.quemequedosincomer));
-        lista.add(new Video("Lugares de Andalucía", R.raw.elriounamierda));
+        if (rv != null) {
+            rv.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        VideoAdapter adapter = new VideoAdapter(lista);
-        rv.setAdapter(adapter);
+            List<Video> lista = new ArrayList<>();
+            lista.add(new Video("Viva Andalucía", R.raw.splash_video));
+            lista.add(new Video("Problemas de Andalucía", R.raw.quemequedosincomer));
+            lista.add(new Video("Lugares de Andalucía", R.raw.elriounamierda));
+
+            VideoAdapter adapter = new VideoAdapter(lista);
+            rv.setAdapter(adapter);
+        }
 
         return view;
     }
