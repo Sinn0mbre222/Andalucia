@@ -2,7 +2,7 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="verdeAndalucia">#008751</color>
+    <color name="verdeAndalucia">#006241</color>
     <color name="blancoIcono">#FFFFFF</color>
     <color name="amarilloMarcado">#FFD700</color>
 </resources>

@@ -22,7 +22,7 @@ public class VideosFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_videos, container, false);
 
-        RecyclerView rv = view.findViewById(R.id.rvVideos);
+        RecyclerView rv = view.findViewById(R.id.recyclerPersonajes);
         rv.setLayoutManager(new LinearLayoutManager(getContext()));
 
         List<Video> lista = new ArrayList<>();

@@ -22,7 +22,6 @@ public class PersonajesAdapter extends RecyclerView.Adapter<PersonajesAdapter.Vi
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // Inflamos el diseño de la tarjeta que creamos antes
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_personaje, parent, false);
         return new ViewHolder(view);
     }
@@ -32,6 +31,7 @@ public class PersonajesAdapter extends RecyclerView.Adapter<PersonajesAdapter.Vi
         Personaje personaje = personajes.get(position);
         holder.txtNombre.setText(personaje.getNombre());
         holder.txtDescripcion.setText(personaje.getDescripcion());
+
         holder.imgPersonaje.setImageResource(personaje.getImagenResId());
     }
 
@@ -46,6 +46,7 @@ public class PersonajesAdapter extends RecyclerView.Adapter<PersonajesAdapter.Vi
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+            // Ahora los IDs coinciden exactamente con el XML de arriba
             imgPersonaje = itemView.findViewById(R.id.imgPersonaje);
             txtNombre = itemView.findViewById(R.id.txtNombre);
             txtDescripcion = itemView.findViewById(R.id.txtDescripcion);
