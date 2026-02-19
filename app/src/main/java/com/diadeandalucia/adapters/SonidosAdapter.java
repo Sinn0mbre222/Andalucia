@@ -13,11 +13,11 @@ import com.diadeandalucia.R;
 import com.diadeandalucia.models.Sonido;
 import java.util.List;
 
-@UnstableApi
+@UnstableApi // Necesario por usar MediaItem y ExoPlayer directamente en el clic
 public class SonidosAdapter extends RecyclerView.Adapter<SonidoViewHolder> {
 
-    private List<Sonido> lista;
-    private ExoPlayer sharedPlayer;
+    private final List<Sonido> lista;
+    private final ExoPlayer sharedPlayer;
 
     public SonidosAdapter(List<Sonido> lista, ExoPlayer player) {
         this.lista = lista;
@@ -37,14 +37,15 @@ public class SonidosAdapter extends RecyclerView.Adapter<SonidoViewHolder> {
         holder.tvTitulo.setText(sonido.getTitulo());
 
         holder.itemView.setOnClickListener(v -> {
-            sharedPlayer.stop();
-            sharedPlayer.clearMediaItems();
+            if (sharedPlayer != null) {
+                sharedPlayer.stop();
+                sharedPlayer.clearMediaItems();
 
-            Uri uri = Uri.parse("android.resource://" + v.getContext().getPackageName() + "/" + sonido.getResId());
-            MediaItem mediaItem = MediaItem.fromUri(uri);
-            sharedPlayer.setMediaItem(mediaItem);
-            sharedPlayer.prepare();
-            sharedPlayer.play();
+                Uri uri = Uri.parse("android.resource://" + v.getContext().getPackageName() + "/" + sonido.getResId());
+                sharedPlayer.setMediaItem(MediaItem.fromUri(uri));
+                sharedPlayer.prepare();
+                sharedPlayer.play();
+            }
         });
     }
 
