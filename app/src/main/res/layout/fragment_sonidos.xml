@@ -1,61 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/blancoFondo"
-    android:gravity="center"
-    android:orientation="vertical"
-    android:padding="24dp">
+    android:background="@color/blancoFondo">
 
-    <ImageView
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:src="@drawable/dragonite_betis"
-        android:layout_marginBottom="10dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="¡A jierro con la música!"
-        android:textColor="@color/verdePrimario"
-        android:textSize="24sp"
-        android:textStyle="bold" />
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="24dp">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Escoge tu 'vibe' andaluz"
-        android:layout_marginBottom="30dp"
-        android:textColor="@color/textoPrincipal" />
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/dragonite_betis"
+            android:layout_marginBottom="10dp" />
 
-    <Button
-        android:id="@+id/btnSonido1"
-        style="@style/BotonAndaluzPro"
-        android:text="El Himno (Modo Serio)" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="¡A jierro con la música!"
+            android:textColor="@color/verdePrimario"
+            android:textSize="24sp"
+            android:textStyle="bold" />
 
-    <Button
-        android:id="@+id/btnSonido2"
-        style="@style/BotonAndaluzPro"
-        android:text="El Risitas (Illo quééé)" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Escoge tu 'vibe' andaluz"
+            android:layout_marginBottom="30dp"
+            android:textColor="@color/textoPrincipal" />
 
-    <Button
-        android:id="@+id/btnSonido3"
-        style="@style/BotonAndaluzPro"
-        android:text="Mussho Beti' (Guerda)" />
+        <Button
+            android:id="@+id/btnSonido1"
+            style="@style/BotonAndaluzPro"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="El Himno (Modo Serio)" />
 
-    <Button
-        android:id="@+id/btnSonido4"
-        style="@style/BotonAndaluzPro"
-        android:text="Sevillanas pa'l cuerpo" />
+        <Button
+            android:id="@+id/btnSonido2"
+            style="@style/BotonAndaluzPro"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="El Risitas (Illo quééé)" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnStop"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="¡Cállate ya, primo!"
-        app:backgroundTint="#D32F2F"
-        app:cornerRadius="20dp" />
+        <Button
+            android:id="@+id/btnSonido3"
+            style="@style/BotonAndaluzPro"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Mussho Beti' (Guerda)" />
 
-</LinearLayout>
+        <Button
+            android:id="@+id/btnSonido4"
+            style="@style/BotonAndaluzPro"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Sevillanas pa'l cuerpo" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnStop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="¡Cállate ya, primo!"
+            app:backgroundTint="#D32F2F"
+            app:cornerRadius="20dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#DDDDDD"
+            android:layout_marginVertical="20dp"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false" />
+
+    </LinearLayout>
+</ScrollView>

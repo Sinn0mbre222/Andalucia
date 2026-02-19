@@ -4,7 +4,6 @@ import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.media3.common.MediaItem;
 import androidx.media3.common.util.UnstableApi;
@@ -15,7 +14,7 @@ import com.diadeandalucia.models.Sonido;
 import java.util.List;
 
 @UnstableApi
-public class SonidosAdapter extends RecyclerView.Adapter<SonidosAdapter.SimpleViewHolder> {
+public class SonidosAdapter extends RecyclerView.Adapter<SonidoViewHolder> {
 
     private List<Sonido> lista;
     private ExoPlayer sharedPlayer;
@@ -27,13 +26,13 @@ public class SonidosAdapter extends RecyclerView.Adapter<SonidosAdapter.SimpleVi
 
     @NonNull
     @Override
-    public SimpleViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public SonidoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_sonido, parent, false);
-        return new SimpleViewHolder(v);
+        return new SonidoViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull SimpleViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull SonidoViewHolder holder, int position) {
         Sonido sonido = lista.get(position);
         holder.tvTitulo.setText(sonido.getTitulo());
 
@@ -42,7 +41,8 @@ public class SonidosAdapter extends RecyclerView.Adapter<SonidosAdapter.SimpleVi
             sharedPlayer.clearMediaItems();
 
             Uri uri = Uri.parse("android.resource://" + v.getContext().getPackageName() + "/" + sonido.getResId());
-            sharedPlayer.setMediaItem(MediaItem.fromUri(uri));
+            MediaItem mediaItem = MediaItem.fromUri(uri);
+            sharedPlayer.setMediaItem(mediaItem);
             sharedPlayer.prepare();
             sharedPlayer.play();
         });
@@ -50,12 +50,4 @@ public class SonidosAdapter extends RecyclerView.Adapter<SonidosAdapter.SimpleVi
 
     @Override
     public int getItemCount() { return lista.size(); }
-
-    public static class SimpleViewHolder extends RecyclerView.ViewHolder {
-        TextView tvTitulo;
-        public SimpleViewHolder(@NonNull View itemView) {
-            super(itemView);
-            tvTitulo = itemView.findViewById(R.id.tvTituloSonido);
-        }
-    }
 }
