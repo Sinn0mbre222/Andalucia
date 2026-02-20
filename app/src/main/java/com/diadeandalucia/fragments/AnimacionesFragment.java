@@ -12,6 +12,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import com.airbnb.lottie.LottieAnimationView;
 import com.diadeandalucia.R;
 
 public class AnimacionesFragment extends Fragment {
@@ -27,6 +29,14 @@ public class AnimacionesFragment extends Fragment {
         ImageView anim3 = view.findViewById(R.id.anim3);
         ImageView anim4 = view.findViewById(R.id.anim4);
         ImageView anim5 = view.findViewById(R.id.anim5);
+        LottieAnimationView lottieDragonite = view.findViewById(R.id.lottieDragonite);
+
+        lottieDragonite.setOnClickListener(v -> {
+            Toast.makeText(getContext(), "¡Cuidado, que el Dragonite tiene hipo!", Toast.LENGTH_SHORT).show();
+
+            // Ejemplo de control por código: Reiniciar la animación al tocar
+            lottieDragonite.playAnimation();
+        });
 
         // 1. Efecto: La peonza (Giro infinito)
         ObjectAnimator rotate = ObjectAnimator.ofFloat(anim1, "rotation", 0f, 360f);

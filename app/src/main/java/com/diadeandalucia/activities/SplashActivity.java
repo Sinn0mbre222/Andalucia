@@ -1,12 +1,11 @@
 package com.diadeandalucia.activities;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler; // Importante añadir esto
-import android.widget.VideoView;
+import android.os.Handler;
+import android.os.Looper; // Mejor práctica usar Looper
 import androidx.appcompat.app.AppCompatActivity;
-import com.diadeandalucia.R;
+import com.diadeandalucia.R; // Asegúrate de que la ruta sea correcta
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -15,17 +14,15 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        VideoView videoView = findViewById(R.id.videoViewSplash);
-        String path = "android.resource://" + getPackageName() + "/" + R.raw.splash_video;
-        videoView.setVideoURI(Uri.parse(path));
-        videoView.start();
+        // Ya no necesitamos configurar el VideoView por código
+        // porque Lottie se autoejecuta con 'app:lottie_autoPlay="true"'
 
-        // ESTO BAJA EL TIEMPO:
-        // Pasamos a MainActivity tras 2000 milisegundos (2 segundos)
-        new Handler().postDelayed(() -> {
+        // Pasamos a MainActivity tras 3000 milisegundos (3 segundos)
+        // He subido un poco el tiempo para que se luzca el Dragonite
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
             Intent intent = new Intent(SplashActivity.this, MainActivity.class);
             startActivity(intent);
             finish();
-        }, 2000);
+        }, 3000);
     }
 }
