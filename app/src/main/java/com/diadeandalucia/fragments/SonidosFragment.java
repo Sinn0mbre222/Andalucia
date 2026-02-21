@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.media3.common.MediaItem;
+import androidx.media3.common.PlaybackParameters; // ¡Importante para la velocidad!
 import androidx.media3.common.util.UnstableApi;
 import androidx.media3.exoplayer.ExoPlayer;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.diadeandalucia.R;
 import com.diadeandalucia.activities.MainActivity;
+import com.diadeandalucia.activities.SplashActivity;
 import com.diadeandalucia.adapters.SonidosAdapter;
 import com.diadeandalucia.models.Sonido;
 
@@ -34,6 +36,7 @@ public class SonidosFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_sonidos, container, false);
 
+        // Pedimos el ExoPlayer global a la MainActivity
         if (getActivity() instanceof MainActivity) {
             sharedPlayer = ((MainActivity) getActivity()).getGlobalPlayer();
         }
@@ -48,9 +51,15 @@ public class SonidosFragment extends Fragment {
 
         // Botón Stop (Cállate ya, primo)
         view.findViewById(R.id.btnStop).setOnClickListener(v -> {
+
+            // 1. Apagamos el himno del Splash si sigue sonando
+            detenerHimnoSplash();
+
+            // 2. Apagamos el reproductor principal
             if (sharedPlayer != null) {
                 sharedPlayer.stop();
                 sharedPlayer.clearMediaItems();
+
                 // Forzamos a la lista a ocultar cualquier control activo
                 if (rv != null && rv.getAdapter() != null) {
                     rv.getAdapter().notifyDataSetChanged();
@@ -77,12 +86,28 @@ public class SonidosFragment extends Fragment {
     }
 
     private void playAudio(int resId) {
+        // 1. Apagamos el himno del Splash para que no se mezclen las canciones
+        detenerHimnoSplash();
+
+        // 2. Reproducimos el nuevo botón pulsado
         if (sharedPlayer != null) {
             sharedPlayer.stop();
             sharedPlayer.clearMediaItems();
 
             Uri uri = Uri.parse("android.resource://" + requireContext().getPackageName() + "/" + resId);
-            sharedPlayer.setMediaItem(MediaItem.fromUri(uri));
+
+            // Construimos con ID para no liar al RecyclerView
+            MediaItem mediaItem = new MediaItem.Builder()
+                    .setUri(uri)
+                    .setMediaId(String.valueOf(resId))
+                    .build();
+
+            sharedPlayer.setMediaItem(mediaItem);
+
+            // --- TRUCO CONTRA LAS ARDILLAS ---
+            // Forzamos la velocidad a 1.0f (velocidad normal)
+            sharedPlayer.setPlaybackParameters(new PlaybackParameters(1f));
+
             sharedPlayer.prepare();
             sharedPlayer.play();
 
@@ -90,6 +115,16 @@ public class SonidosFragment extends Fragment {
             if (rv != null && rv.getAdapter() != null) {
                 rv.getAdapter().notifyDataSetChanged();
             }
+        }
+    }
+
+    private void detenerHimnoSplash() {
+        if (SplashActivity.himnoPlayer != null) {
+            if (SplashActivity.himnoPlayer.isPlaying()) {
+                SplashActivity.himnoPlayer.stop();
+            }
+            SplashActivity.himnoPlayer.release();
+            SplashActivity.himnoPlayer = null;
         }
     }
 }

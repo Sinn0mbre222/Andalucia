@@ -7,12 +7,14 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.media3.common.MediaItem;
+import androidx.media3.common.PlaybackParameters; // ¡Importante para la velocidad!
 import androidx.media3.common.Player;
 import androidx.media3.common.util.UnstableApi;
 import androidx.media3.exoplayer.ExoPlayer;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.diadeandalucia.R;
+import com.diadeandalucia.activities.SplashActivity;
 import com.diadeandalucia.models.Sonido;
 
 import java.util.List;
@@ -54,20 +56,37 @@ public class SonidosAdapter extends RecyclerView.Adapter<SonidoViewHolder> {
         }
 
         holder.itemView.setOnClickListener(v -> {
+
+            // --- DETENER EL HIMNO DEL SPLASH SI SIGUE SONANDO ---
+            if (SplashActivity.himnoPlayer != null) {
+                if (SplashActivity.himnoPlayer.isPlaying()) {
+                    SplashActivity.himnoPlayer.stop();
+                }
+                SplashActivity.himnoPlayer.release();
+                SplashActivity.himnoPlayer = null;
+            }
+
             if (sharedPlayer != null) {
                 // 3. Parada total y limpieza de la cola de reproducción
                 sharedPlayer.stop();
                 sharedPlayer.clearMediaItems();
 
-                // Desvinculamos el control actual para forzar el refresco
+                // Desvinculamos el control actual para forzar el refresco visual
                 holder.controlView.setPlayer(null);
 
-                // 4. Construimos la URI y el MediaItem
+                // 4. Construimos la URI y el MediaItem con ID para que Media3 no se líe
                 Uri uri = Uri.parse("android.resource://" + v.getContext().getPackageName() + "/" + sonido.getResId());
-                MediaItem mediaItem = MediaItem.fromUri(uri);
+                MediaItem mediaItem = new MediaItem.Builder()
+                        .setUri(uri)
+                        .setMediaId(String.valueOf(sonido.getResId())) // ID vital
+                        .build();
 
                 sharedPlayer.setMediaItem(mediaItem);
                 sharedPlayer.setRepeatMode(Player.REPEAT_MODE_ALL);
+
+                // --- TRUCO CONTRA LAS ARDILLAS ---
+                // Forzamos la velocidad a 1.0f (velocidad normal)
+                sharedPlayer.setPlaybackParameters(new PlaybackParameters(1f));
 
                 // 5. Preparamos y vinculamos el control JUSTO antes de sonar
                 sharedPlayer.prepare();
