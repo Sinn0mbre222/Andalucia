@@ -51,12 +51,14 @@ public class SonidosFragment extends Fragment {
             rv.setLayoutManager(new LinearLayoutManager(getContext()));
 
             // Importante: Al estar dentro de un ScrollView, desactivamos el scroll propio del RV
-            rv.setNestedScrollingEnabled(false);
+            rv.setNestedScrollingEnabled(true);
 
             // Creamos la lista de sonidos adicionales
             List<Sonido> lista = new ArrayList<>();
-            lista.add(new Sonido("Mandanga Style", R.raw.mandangastyle));
             lista.add(new Sonido("Tómbola", R.raw.tombola));
+            lista.add(new Sonido("Ave María", R.raw.ave_maria));
+            lista.add(new Sonido("La leyenda del tiempo", R.raw.camaron));
+            lista.add(new Sonido("Mandanga Style", R.raw.mandangastyle));
 
             // Inicializamos el adaptador pasándole la lista y el reproductor compartido
             SonidosAdapter adapter = new SonidosAdapter(lista, sharedPlayer);

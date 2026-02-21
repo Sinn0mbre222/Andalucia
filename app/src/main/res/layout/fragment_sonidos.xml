@@ -47,7 +47,7 @@
 
         <Button android:id="@+id/btnSonido4" style="@style/BotonAndaluzPro"
             android:layout_width="match_parent" android:layout_height="wrap_content"
-            android:text="Sevillanas pa'l cuerpo" />
+            android:text="Macarenaa!! (Pal mundo desde triana)" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnStop"

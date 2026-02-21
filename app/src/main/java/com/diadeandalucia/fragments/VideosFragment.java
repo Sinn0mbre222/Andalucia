@@ -26,10 +26,14 @@ public class VideosFragment extends Fragment {
         rv.setLayoutManager(new LinearLayoutManager(getContext()));
 
         List<Video> lista = new ArrayList<>();
-        lista.add(new Video("Viva Andalucía", R.raw.splash_video));
-        lista.add(new Video("Problemas de Andalucía", R.raw.quemequedosincomer));
-        lista.add(new Video("Lugares de Andalucía", R.raw.elriounamierda));
+        lista.add(new Video("Viva Andalucía", R.raw.himno_andalucia_video));
+        lista.add(new Video("Pasando hambre", R.raw.quemequedosincomer));
+        lista.add(new Video("Guapa, guapa y guapaaa!!", R.raw.guapa));
+        lista.add(new Video("El río?", R.raw.elriounamierda));
         lista.add(new Video("Betis libre", R.raw.lopera));
+        lista.add(new Video("Sa mato Paco", R.raw.sa_matao_paco));
+        lista.add(new Video("Y modabaaa!!", R.raw.modaba));
+        lista.add(new Video("Nocillaaa!!", R.raw.nocilla));
 
         VideoAdapter adapter = new VideoAdapter(lista);
         rv.setAdapter(adapter);
