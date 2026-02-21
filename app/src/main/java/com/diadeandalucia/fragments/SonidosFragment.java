@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.diadeandalucia.R;
+import com.diadeandalucia.activities.MainActivity;
 import com.diadeandalucia.adapters.SonidosAdapter;
 import com.diadeandalucia.models.Sonido;
 
@@ -26,41 +27,48 @@ import java.util.List;
 public class SonidosFragment extends Fragment {
 
     private ExoPlayer sharedPlayer;
+    private RecyclerView rv; // Variable de clase para que sea accesible en todo el Fragment
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        // Inflamos el layout que contiene el ScrollView, los botones y el RecyclerView
         View view = inflater.inflate(R.layout.fragment_sonidos, container, false);
 
-        // Inicializamos el reproductor único para todo el fragmento
-        sharedPlayer = new ExoPlayer.Builder(requireContext()).build();
+        if (getActivity() instanceof MainActivity) {
+            sharedPlayer = ((MainActivity) getActivity()).getGlobalPlayer();
+        }
 
-        // Configuración de clics en los botones destacados (IDs del XML)
+        rv = view.findViewById(R.id.rv);
+
+        // Botones destacados (Arriba)
         view.findViewById(R.id.btnSonido1).setOnClickListener(v -> playAudio(R.raw.himno_andalucia));
         view.findViewById(R.id.btnSonido2).setOnClickListener(v -> playAudio(R.raw.risitas));
         view.findViewById(R.id.btnSonido3).setOnClickListener(v -> playAudio(R.raw.himnobetis));
         view.findViewById(R.id.btnSonido4).setOnClickListener(v -> playAudio(R.raw.macarena));
 
-        // Botón Stop (¡Cállate ya, primo!)
-        view.findViewById(R.id.btnStop).setOnClickListener(v -> sharedPlayer.stop());
+        // Botón Stop (Cállate ya, primo)
+        view.findViewById(R.id.btnStop).setOnClickListener(v -> {
+            if (sharedPlayer != null) {
+                sharedPlayer.stop();
+                sharedPlayer.clearMediaItems();
+                // Forzamos a la lista a ocultar cualquier control activo
+                if (rv != null && rv.getAdapter() != null) {
+                    rv.getAdapter().notifyDataSetChanged();
+                }
+            }
+        });
 
-        // Configuración del RecyclerView para la lista "Más sonidos"
-        RecyclerView rv = view.findViewById(R.id.rv);
+        // Configuración de la lista (Abajo)
         if (rv != null) {
             rv.setLayoutManager(new LinearLayoutManager(getContext()));
+            rv.setNestedScrollingEnabled(false);
 
-            // Importante: Al estar dentro de un ScrollView, desactivamos el scroll propio del RV
-            rv.setNestedScrollingEnabled(true);
-
-            // Creamos la lista de sonidos adicionales
             List<Sonido> lista = new ArrayList<>();
             lista.add(new Sonido("Tómbola", R.raw.tombola));
             lista.add(new Sonido("Ave María", R.raw.ave_maria));
             lista.add(new Sonido("La leyenda del tiempo", R.raw.camaron));
             lista.add(new Sonido("Mandanga Style", R.raw.mandangastyle));
 
-            // Inicializamos el adaptador pasándole la lista y el reproductor compartido
             SonidosAdapter adapter = new SonidosAdapter(lista, sharedPlayer);
             rv.setAdapter(adapter);
         }
@@ -68,32 +76,20 @@ public class SonidosFragment extends Fragment {
         return view;
     }
 
-    /**
-     * Método para reproducir un audio desde la carpeta res/raw
-     * @param resId ID del recurso (ej: R.raw.nombre_audio)
-     */
     private void playAudio(int resId) {
         if (sharedPlayer != null) {
             sharedPlayer.stop();
             sharedPlayer.clearMediaItems();
 
-            // Construimos la URI del recurso
             Uri uri = Uri.parse("android.resource://" + requireContext().getPackageName() + "/" + resId);
-            MediaItem mediaItem = MediaItem.fromUri(uri);
-
-            sharedPlayer.setMediaItem(mediaItem);
+            sharedPlayer.setMediaItem(MediaItem.fromUri(uri));
             sharedPlayer.prepare();
             sharedPlayer.play();
-        }
-    }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        // Liberamos el reproductor al cerrar el fragmento para evitar fugas de memoria
-        if (sharedPlayer != null) {
-            sharedPlayer.release();
-            sharedPlayer = null;
+            // Sincronizamos la lista: si estaba sonando algo abajo, se limpia el control
+            if (rv != null && rv.getAdapter() != null) {
+                rv.getAdapter().notifyDataSetChanged();
+            }
         }
     }
 }
