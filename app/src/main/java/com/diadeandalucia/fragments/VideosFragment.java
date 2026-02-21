@@ -7,20 +7,31 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.media3.common.util.UnstableApi;
+import androidx.media3.exoplayer.ExoPlayer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.diadeandalucia.R;
+import com.diadeandalucia.activities.MainActivity;
 import com.diadeandalucia.adapters.VideoAdapter;
 import com.diadeandalucia.models.Video;
 import java.util.ArrayList;
 import java.util.List;
 
+@UnstableApi
 public class VideosFragment extends Fragment {
+
+    private ExoPlayer sharedPlayer;
+    private VideoAdapter adapter;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_videos, container, false);
+
+        if (getActivity() instanceof MainActivity) {
+            sharedPlayer = ((MainActivity) getActivity()).getGlobalPlayer();
+        }
 
         RecyclerView rv = view.findViewById(R.id.recyclerPersonajes);
         rv.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -35,9 +46,26 @@ public class VideosFragment extends Fragment {
         lista.add(new Video("Y modabaaa!!", R.raw.modaba));
         lista.add(new Video("Nocillaaa!!", R.raw.nocilla));
 
-        VideoAdapter adapter = new VideoAdapter(lista);
+        adapter = new VideoAdapter(lista, sharedPlayer);
         rv.setAdapter(adapter);
 
         return view;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (adapter != null) {
+            adapter.detenerVideoActivo();
+        }
+    }
+
+    // --- NUEVO: MATAR A LOS ZOMBIS AL CAMBIAR DE PESTAÑA ---
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (adapter != null) {
+            adapter.liberarTodosLosReproductores(); // Limpiamos la RAM de vídeo
+        }
     }
 }
