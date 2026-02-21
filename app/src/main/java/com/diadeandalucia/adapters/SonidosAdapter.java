@@ -4,10 +4,11 @@ import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SeekBar;
 
 import androidx.annotation.NonNull;
 import androidx.media3.common.MediaItem;
-import androidx.media3.common.PlaybackParameters; // ¡Importante para la velocidad!
+import androidx.media3.common.PlaybackParameters;
 import androidx.media3.common.Player;
 import androidx.media3.common.util.UnstableApi;
 import androidx.media3.exoplayer.ExoPlayer;
@@ -42,10 +43,8 @@ public class SonidosAdapter extends RecyclerView.Adapter<SonidoViewHolder> {
         Sonido sonido = lista.get(position);
         holder.tvTitulo.setText(sonido.getTitulo());
 
-        // 1. Limpieza de seguridad: desvinculamos el reproductor de la vista reciclada
         holder.controlView.setPlayer(null);
 
-        // 2. Si el reproductor tiene algo cargado, verificamos si es este sonido
         if (sharedPlayer.getCurrentMediaItem() != null) {
             String currentUri = sharedPlayer.getCurrentMediaItem().localConfiguration.uri.toString();
             String itemUri = "android.resource://" + holder.itemView.getContext().getPackageName() + "/" + sonido.getResId();
@@ -55,9 +54,29 @@ public class SonidosAdapter extends RecyclerView.Adapter<SonidoViewHolder> {
             }
         }
 
-        holder.itemView.setOnClickListener(v -> {
+        // --- NUEVO: CONTROL DE VOLUMEN ---
+        if (sharedPlayer != null) {
+            // Actualizamos la barra según el volumen actual (0.0 a 1.0 -> 0 a 100)
+            holder.sbVolumen.setProgress((int) (sharedPlayer.getVolume() * 100));
 
-            // --- DETENER EL HIMNO DEL SPLASH SI SIGUE SONANDO ---
+            holder.sbVolumen.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    if (fromUser) {
+                        sharedPlayer.setVolume(progress / 100f);
+                    }
+                }
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {}
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {}
+            });
+        }
+        // ---------------------------------
+
+        holder.itemView.setOnClickListener(v -> {
             if (SplashActivity.himnoPlayer != null) {
                 if (SplashActivity.himnoPlayer.isPlaying()) {
                     SplashActivity.himnoPlayer.stop();
@@ -67,33 +86,25 @@ public class SonidosAdapter extends RecyclerView.Adapter<SonidoViewHolder> {
             }
 
             if (sharedPlayer != null) {
-                // 3. Parada total y limpieza de la cola de reproducción
                 sharedPlayer.stop();
                 sharedPlayer.clearMediaItems();
 
-                // Desvinculamos el control actual para forzar el refresco visual
                 holder.controlView.setPlayer(null);
 
-                // 4. Construimos la URI y el MediaItem con ID para que Media3 no se líe
                 Uri uri = Uri.parse("android.resource://" + v.getContext().getPackageName() + "/" + sonido.getResId());
                 MediaItem mediaItem = new MediaItem.Builder()
                         .setUri(uri)
-                        .setMediaId(String.valueOf(sonido.getResId())) // ID vital
+                        .setMediaId(String.valueOf(sonido.getResId()))
                         .build();
 
                 sharedPlayer.setMediaItem(mediaItem);
                 sharedPlayer.setRepeatMode(Player.REPEAT_MODE_ALL);
-
-                // --- TRUCO CONTRA LAS ARDILLAS ---
-                // Forzamos la velocidad a 1.0f (velocidad normal)
                 sharedPlayer.setPlaybackParameters(new PlaybackParameters(1f));
 
-                // 5. Preparamos y vinculamos el control JUSTO antes de sonar
                 sharedPlayer.prepare();
                 holder.controlView.setPlayer(sharedPlayer);
                 sharedPlayer.play();
 
-                // 6. Notificamos para que los otros items suelten el control visual
                 notifyDataSetChanged();
             }
         });

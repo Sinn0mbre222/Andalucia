@@ -4,6 +4,7 @@ import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.media3.common.MediaItem;
@@ -28,7 +29,6 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
     private boolean musicaPausadaPorVideo = false;
     private ExoPlayer activeVideoPlayer = null;
 
-    // Lista para tener controlados todos los reproductores VIVOS
     private final List<ExoPlayer> reproductoresCreados = new ArrayList<>();
 
     public VideoAdapter(List<Video> lista, ExoPlayer backgroundMusicPlayer) {
@@ -43,23 +43,17 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
         return new VideoViewHolder(view);
     }
 
-    // 1. BIND SOLO TEXTO (Súper rápido y no gasta RAM)
     @Override
     public void onBindViewHolder(@NonNull VideoViewHolder holder, int position) {
         Video video = lista.get(position);
         holder.tvTitulo.setText(video.getTitulo());
-
-        // Solo guardamos qué vídeo le toca a esta fila, pero NO lo cargamos todavía
         holder.videoAsignado = video;
     }
 
-    // 2. MAGIA: EL VÍDEO ENTRA EN PANTALLA
     @Override
     public void onViewAttachedToWindow(@NonNull VideoViewHolder holder) {
         super.onViewAttachedToWindow(holder);
 
-        // El usuario acaba de hacer scroll y este vídeo ha aparecido en pantalla.
-        // ¡Ahora sí lo cargamos!
         if (holder.videoAsignado != null) {
 
             if (holder.videoPlayer == null) {
@@ -74,7 +68,27 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
             holder.videoPlayer.setMediaItem(mediaItem);
 
             holder.videoPlayer.setPlayWhenReady(false);
-            holder.videoPlayer.prepare(); // Carga la miniatura consumiendo RAM solo de los visibles
+            holder.videoPlayer.prepare();
+
+            // --- NUEVO: CONTROL DE VOLUMEN ---
+            holder.sbVolumen.setProgress((int) (holder.videoPlayer.getVolume() * 100));
+
+            holder.sbVolumen.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    if (fromUser && holder.videoPlayer != null) {
+                        float volumen = progress / 100f;
+                        holder.videoPlayer.setVolume(volumen);
+                    }
+                }
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {}
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {}
+            });
+            // ---------------------------------
 
             holder.videoPlayer.addListener(new Player.Listener() {
                 @Override
@@ -104,7 +118,6 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
                     }
                 }
 
-                // Por si el emulador sigue tosiendo, capturamos el error para no crashear
                 @Override
                 public void onPlayerError(@NonNull PlaybackException error) {
                     if (activeVideoPlayer == holder.videoPlayer) {
@@ -116,13 +129,10 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
         }
     }
 
-    // 3. MAGIA: EL VÍDEO SALE DE LA PANTALLA
     @Override
     public void onViewDetachedFromWindow(@NonNull VideoViewHolder holder) {
         super.onViewDetachedFromWindow(holder);
 
-        // El usuario ha hecho scroll y el vídeo ya no se ve.
-        // ¡Lo destruimos al instante para liberar la RAM de vídeo!
         if (holder.videoPlayer != null) {
             if (holder.videoPlayer == activeVideoPlayer) {
                 reanudarMusicaDeFondo();
@@ -130,20 +140,23 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
             }
 
             reproductoresCreados.remove(holder.videoPlayer);
-            holder.videoPlayer.release(); // Libera el decodificador de hardware
+            holder.videoPlayer.release();
             holder.videoPlayer = null;
             holder.playerView.setPlayer(null);
+
+            // Limpiamos el listener del seekbar por si acaso
+            holder.sbVolumen.setOnSeekBarChangeListener(null);
         }
     }
 
     @Override
     public void onViewRecycled(@NonNull VideoViewHolder holder) {
         super.onViewRecycled(holder);
-        // Por seguridad, aseguramos la limpieza
         if (holder.videoPlayer != null) {
             holder.videoPlayer.release();
             holder.videoPlayer = null;
             holder.playerView.setPlayer(null);
+            holder.sbVolumen.setOnSeekBarChangeListener(null);
         }
     }
 
@@ -167,8 +180,6 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
         reproductoresCreados.clear();
         activeVideoPlayer = null;
     }
-
-    // --- MÉTODOS AUXILIARES ---
 
     private void pausarMusicaDeFondo() {
         if (backgroundMusicPlayer != null && backgroundMusicPlayer.isPlaying()) {
@@ -197,12 +208,14 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
         TextView tvTitulo;
         PlayerView playerView;
         ExoPlayer videoPlayer;
-        Video videoAsignado; // NUEVO: Guardamos qué vídeo le toca
+        Video videoAsignado;
+        SeekBar sbVolumen; // NUEVO
 
         public VideoViewHolder(@NonNull View itemView) {
             super(itemView);
             tvTitulo = itemView.findViewById(R.id.tvTituloVideo);
             playerView = itemView.findViewById(R.id.exoPlayerView);
+            sbVolumen = itemView.findViewById(R.id.seekBarVolumen); // NUEVO
         }
     }
 }
