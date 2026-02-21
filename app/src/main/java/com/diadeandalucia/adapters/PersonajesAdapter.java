@@ -37,9 +37,9 @@ public class PersonajesAdapter extends RecyclerView.Adapter<PersonajesAdapter.Vi
 
         holder.itemView.setOnClickListener(v -> {
             String mensaje = "";
-            // Usamos toLowerCase() para que no falle si escribes en mayúsculas/minúsculas
             String nombre = personaje.getNombre().toLowerCase();
 
+            // --- LOS DE SIEMPRE ---
             if (nombre.contains("joaquin")) {
                 mensaje = "¡No he cogido una raqueta en mi vida, Hulio!";
             } else if (nombre.contains("risitas")) {
@@ -52,6 +52,16 @@ public class PersonajesAdapter extends RecyclerView.Adapter<PersonajesAdapter.Vi
                 mensaje = "¡Fistro pecador!, ¿Te da cuén?, Hasta luego Lucarrr";
             } else if (nombre.contains("pepi")) {
                 mensaje = "¡Nociiillaaa que merendillaaa!";
+            }
+            // --- LOS ILUSTRES ---
+            else if (nombre.contains("blas infante")) {
+                mensaje = "¡Andalucía por sí, para España y la Humanidad!";
+            } else if (nombre.contains("lorca") || nombre.contains("federico")) {
+                mensaje = "Verde que te quiero verde...";
+            } else if (nombre.contains("picasso")) {
+                mensaje = "La inspiración existe, pero tiene que encontrarte trabajando.";
+            } else if (nombre.contains("lola flores")) {
+                mensaje = "¡Si me queréis, irse!";
             } else {
                 mensaje = "¡Ole con ole y olé!";
             }
@@ -71,7 +81,6 @@ public class PersonajesAdapter extends RecyclerView.Adapter<PersonajesAdapter.Vi
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            // Ahora los IDs coinciden exactamente con el XML de arriba
             imgPersonaje = itemView.findViewById(R.id.imgPersonaje);
             txtNombre = itemView.findViewById(R.id.txtNombre);
             txtDescripcion = itemView.findViewById(R.id.txtDescripcion);

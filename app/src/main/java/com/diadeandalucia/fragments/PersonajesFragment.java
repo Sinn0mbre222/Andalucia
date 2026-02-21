@@ -27,13 +27,18 @@ public class PersonajesFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         List<Personaje> lista = new ArrayList<>();
-        // Añade aquí tus personajes (nombre, descripción, imagen)
+
         lista.add(new Personaje("Dragonite", "Dragonite del betis, icono de la aplicación es famoso por su increíble cola", R.drawable.dragonite_betis));
         lista.add(new Personaje("Juan y medio", "Presidente honorifíco de la República independiente de Andalucía", R.drawable.juan_y_medio2));
         lista.add(new Personaje("El Risitas", "Embajador mundial de la paellera perdida y CEO del cuñao. ", R.drawable.risitas));
         lista.add(new Personaje("Joaquin Sanchez", "Campeón mundial en Tenis y en sus ratos libres jugaba al fútbol", R.drawable.joaquin));
         lista.add(new Personaje("Chiquito de la calzada", "El hombre que caminaba de lado antes que Michael Jackson. ¡No puedor, no puedor!", R.drawable.chiquito));
         lista.add(new Personaje("La Pepi", "La crítica gastronómica más sincera de Andalucía. Su merienda con Nocilla es el mejor anuncio de la historia.", R.drawable.pepi));
+
+        lista.add(new Personaje("Blas Infante", "Considerado el 'Padre de la Patria Andaluza'. Ideólogo del andalucismo, creador de la bandera, el escudo y la letra del himno de Andalucía.", R.drawable.blas_infante));
+        lista.add(new Personaje("Federico García Lorca", "Poeta y dramaturgo granadino, una de las figuras más brillantes e influyentes de la literatura española del siglo XX.", R.drawable.lorca));
+        lista.add(new Personaje("Pablo Picasso", "Pintor y escultor malagueño, creador del cubismo y uno de los artistas más importantes de la historia del arte mundial.", R.drawable.picasso));
+        lista.add(new Personaje("Lola Flores", "Conocida como 'La Faraona'. Cantante, bailaora y actriz jerezana, icono absoluto del flamenco y de la cultura popular de España.", R.drawable.lola_flores));
 
         PersonajesAdapter adapter = new PersonajesAdapter(lista);
         recyclerView.setAdapter(adapter);
