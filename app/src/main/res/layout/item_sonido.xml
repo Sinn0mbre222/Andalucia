@@ -17,13 +17,27 @@
         android:textStyle="bold"
         android:textSize="16sp"/>
 
-    <androidx.media3.ui.PlayerControlView
-        android:id="@+id/exoController"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:show_timeout="0"
-        app:show_next_button="false"
-        app:show_previous_button="false"/>
+        android:layout_marginTop="4dp">
+
+        <androidx.media3.ui.PlayerControlView
+            android:id="@+id/exoController"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:show_timeout="0"
+            app:show_next_button="false"
+            app:show_previous_button="false"/>
+
+        <View
+            android:id="@+id/capaClic"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackground" />
+    </FrameLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

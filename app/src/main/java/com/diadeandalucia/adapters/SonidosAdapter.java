@@ -45,18 +45,30 @@ public class SonidosAdapter extends RecyclerView.Adapter<SonidoViewHolder> {
 
         holder.controlView.setPlayer(null);
 
+        // Comprobamos si este item es el que está sonando actualmente
+        boolean isPlayingThisItem = false;
+
         if (sharedPlayer.getCurrentMediaItem() != null) {
             String currentUri = sharedPlayer.getCurrentMediaItem().localConfiguration.uri.toString();
             String itemUri = "android.resource://" + holder.itemView.getContext().getPackageName() + "/" + sonido.getResId();
 
             if (currentUri.equals(itemUri)) {
+                isPlayingThisItem = true;
                 holder.controlView.setPlayer(sharedPlayer);
             }
         }
 
-        // --- NUEVO: CONTROL DE VOLUMEN ---
+        // MAGIA DE LA CAPA INVISIBLE
+        if (isPlayingThisItem) {
+            // Si está sonando, quitamos el cristal para que pueda usar el botón de pause y la barra
+            holder.capaClic.setVisibility(View.GONE);
+        } else {
+            // Si no está sonando, ponemos el cristal para que atrape su clic en el botón de play apagado
+            holder.capaClic.setVisibility(View.VISIBLE);
+        }
+
+        // CONTROL DE VOLUMEN
         if (sharedPlayer != null) {
-            // Actualizamos la barra según el volumen actual (0.0 a 1.0 -> 0 a 100)
             holder.sbVolumen.setProgress((int) (sharedPlayer.getVolume() * 100));
 
             holder.sbVolumen.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -66,17 +78,13 @@ public class SonidosAdapter extends RecyclerView.Adapter<SonidoViewHolder> {
                         sharedPlayer.setVolume(progress / 100f);
                     }
                 }
-
-                @Override
-                public void onStartTrackingTouch(SeekBar seekBar) {}
-
-                @Override
-                public void onStopTrackingTouch(SeekBar seekBar) {}
+                @Override public void onStartTrackingTouch(SeekBar seekBar) {}
+                @Override public void onStopTrackingTouch(SeekBar seekBar) {}
             });
         }
-        // ---------------------------------
 
-        holder.itemView.setOnClickListener(v -> {
+        // HEMOS SACADO LA LÓGICA DEL CLIC A UNA VARIABLE PARA PODER ASIGNÁRSELA A LOS DOS SITIOS
+        View.OnClickListener playClickListener = v -> {
             if (SplashActivity.himnoPlayer != null) {
                 if (SplashActivity.himnoPlayer.isPlaying()) {
                     SplashActivity.himnoPlayer.stop();
@@ -105,9 +113,14 @@ public class SonidosAdapter extends RecyclerView.Adapter<SonidoViewHolder> {
                 holder.controlView.setPlayer(sharedPlayer);
                 sharedPlayer.play();
 
+                // Notificamos para que la lista se repinte, quitando el cristal al nuevo y poniéndoselo al viejo
                 notifyDataSetChanged();
             }
-        });
+        };
+
+        // Asignamos el clic tanto a la fila entera como a la capa invisible que hay sobre el botón
+        holder.itemView.setOnClickListener(playClickListener);
+        holder.capaClic.setOnClickListener(playClickListener);
     }
 
     @Override

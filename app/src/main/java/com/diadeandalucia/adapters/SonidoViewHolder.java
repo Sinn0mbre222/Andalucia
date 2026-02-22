@@ -13,12 +13,14 @@ import com.diadeandalucia.R;
 public class SonidoViewHolder extends RecyclerView.ViewHolder {
     public TextView tvTitulo;
     public PlayerControlView controlView;
-    public SeekBar sbVolumen; // NUEVO
+    public SeekBar sbVolumen;
+    public View capaClic; // NUEVO: La capa invisible
 
     public SonidoViewHolder(@NonNull View itemView) {
         super(itemView);
         tvTitulo = itemView.findViewById(R.id.tvTituloSonido);
         controlView = itemView.findViewById(R.id.exoController);
-        sbVolumen = itemView.findViewById(R.id.seekBarVolumen); // NUEVO
+        sbVolumen = itemView.findViewById(R.id.seekBarVolumen);
+        capaClic = itemView.findViewById(R.id.capaClic); // NUEVO
     }
 }
