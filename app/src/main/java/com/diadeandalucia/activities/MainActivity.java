@@ -1,5 +1,6 @@
 package com.diadeandalucia.activities;
 
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -20,20 +21,21 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 @UnstableApi
 public class MainActivity extends AppCompatActivity {
 
-    // REPRODUCTOR GLOBAL
     private ExoPlayer globalPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        SplashActivity.himnoPlayer = MediaPlayer.create(this, R.raw.himno_andalucia);
 
-        // Inicializamos el reproductor que sonará en toda la app
+        if (SplashActivity.himnoPlayer != null) {
+            SplashActivity.himnoPlayer.setLooping(true);
+            SplashActivity.himnoPlayer.start();
+        }
         globalPlayer = new ExoPlayer.Builder(this).build();
-        // Configuramos para que siempre repita la canción elegida (Bucle)
         globalPlayer.setRepeatMode(Player.REPEAT_MODE_ALL);
 
-        // Configuración visual de la barra de estado
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.verdePrimario));
         }
@@ -69,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // Mtodo para que los Fragments puedan obtener el reproductor de la Activity
+    // Metodo para que los Fragments puedan obtener el reproductor de la Activity
     public ExoPlayer getGlobalPlayer() {
         return globalPlayer;
     }

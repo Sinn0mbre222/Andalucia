@@ -13,7 +13,6 @@ import com.diadeandalucia.R;
 @UnstableApi
 public class SplashActivity extends AppCompatActivity {
 
-    // Lo hacemos estático para que la música NO se corte al pasar al MainActivity
     public static MediaPlayer himnoPlayer;
 
     @Override
@@ -21,13 +20,10 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        // ¡A jierro! Iniciamos el himno nada más aparecer el Splash
-        if (himnoPlayer == null) {
-            himnoPlayer = MediaPlayer.create(this, R.raw.himno_andalucia);
-            himnoPlayer.setLooping(true); // Para que esté en bucle
+        himnoPlayer = MediaPlayer.create(this, R.raw.ole);
+        if (himnoPlayer != null) {
             himnoPlayer.start();
         }
-
         // Pasamos a MainActivity tras 3000 milisegundos
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             Intent intent = new Intent(SplashActivity.this, MainActivity.class);

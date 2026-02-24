@@ -98,5 +98,13 @@
             android:src="@drawable/juan_y_medio"
             android:layout_marginBottom="30dp"/>
 
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottieDiglett"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            app:lottie_rawRes="@raw/diglett"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true" />
+
     </LinearLayout>
 </ScrollView>
