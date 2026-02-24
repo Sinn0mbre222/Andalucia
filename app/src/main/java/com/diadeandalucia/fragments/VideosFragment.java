@@ -60,12 +60,11 @@ public class VideosFragment extends Fragment {
         }
     }
 
-    // --- NUEVO: MATAR A LOS ZOMBIS AL CAMBIAR DE PESTAÑA ---
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         if (adapter != null) {
-            adapter.liberarTodosLosReproductores(); // Limpiamos la RAM de vídeo
+            adapter.liberarTodosLosReproductores();
         }
     }
 }

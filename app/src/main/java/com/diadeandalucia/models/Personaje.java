@@ -2,7 +2,7 @@ package com.diadeandalucia.models;
 public class Personaje {
     private String nombre;
     private String descripcion;
-    private int imagenResId; // ID del drawable
+    private int imagenResId;
 
     public Personaje(String nombre, String descripcion, int imagenResId) {
         this.nombre = nombre;

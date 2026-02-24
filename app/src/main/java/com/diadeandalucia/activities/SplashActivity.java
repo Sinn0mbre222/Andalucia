@@ -24,7 +24,6 @@ public class SplashActivity extends AppCompatActivity {
         if (himnoPlayer != null) {
             himnoPlayer.start();
         }
-        // Pasamos a MainActivity tras 3000 milisegundos
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             Intent intent = new Intent(SplashActivity.this, MainActivity.class);
             startActivity(intent);

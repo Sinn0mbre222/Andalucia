@@ -70,7 +70,6 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
             holder.videoPlayer.setPlayWhenReady(false);
             holder.videoPlayer.prepare();
 
-            // --- NUEVO: CONTROL DE VOLUMEN ---
             holder.sbVolumen.setProgress((int) (holder.videoPlayer.getVolume() * 100));
 
             holder.sbVolumen.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -88,7 +87,6 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
                 @Override
                 public void onStopTrackingTouch(SeekBar seekBar) {}
             });
-            // ---------------------------------
 
             holder.videoPlayer.addListener(new Player.Listener() {
                 @Override
@@ -144,7 +142,6 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
             holder.videoPlayer = null;
             holder.playerView.setPlayer(null);
 
-            // Limpiamos el listener del seekbar por si acaso
             holder.sbVolumen.setOnSeekBarChangeListener(null);
         }
     }
@@ -209,13 +206,13 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
         PlayerView playerView;
         ExoPlayer videoPlayer;
         Video videoAsignado;
-        SeekBar sbVolumen; // NUEVO
+        SeekBar sbVolumen;
 
         public VideoViewHolder(@NonNull View itemView) {
             super(itemView);
             tvTitulo = itemView.findViewById(R.id.tvTituloVideo);
             playerView = itemView.findViewById(R.id.exoPlayerView);
-            sbVolumen = itemView.findViewById(R.id.seekBarVolumen); // NUEVO
+            sbVolumen = itemView.findViewById(R.id.seekBarVolumen);
         }
     }
 }

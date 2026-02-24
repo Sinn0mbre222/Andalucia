@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.media3.common.MediaItem;
@@ -12,6 +13,7 @@ import androidx.media3.common.PlaybackParameters;
 import androidx.media3.common.Player;
 import androidx.media3.common.util.UnstableApi;
 import androidx.media3.exoplayer.ExoPlayer;
+import androidx.media3.ui.PlayerControlView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.diadeandalucia.R;
@@ -21,7 +23,7 @@ import com.diadeandalucia.models.Sonido;
 import java.util.List;
 
 @UnstableApi
-public class SonidosAdapter extends RecyclerView.Adapter<SonidoViewHolder> {
+public class SonidosAdapter extends RecyclerView.Adapter<SonidosAdapter.SonidoViewHolder> {
 
     private final List<Sonido> lista;
     private final ExoPlayer sharedPlayer;
@@ -58,16 +60,13 @@ public class SonidosAdapter extends RecyclerView.Adapter<SonidoViewHolder> {
             }
         }
 
-        // MAGIA DE LA CAPA INVISIBLE
+        // Lógica de la capa invisible para atrapar el clic sobre el botón de play
         if (isPlayingThisItem) {
-            // Si está sonando, quitamos el cristal para que pueda usar el botón de pause y la barra
             holder.capaClic.setVisibility(View.GONE);
         } else {
-            // Si no está sonando, ponemos el cristal para que atrape su clic en el botón de play apagado
             holder.capaClic.setVisibility(View.VISIBLE);
         }
 
-        // CONTROL DE VOLUMEN
         if (sharedPlayer != null) {
             holder.sbVolumen.setProgress((int) (sharedPlayer.getVolume() * 100));
 
@@ -83,8 +82,8 @@ public class SonidosAdapter extends RecyclerView.Adapter<SonidoViewHolder> {
             });
         }
 
-        // HEMOS SACADO LA LÓGICA DEL CLIC A UNA VARIABLE PARA PODER ASIGNÁRSELA A LOS DOS SITIOS
         View.OnClickListener playClickListener = v -> {
+            // Detener himno del Splash si existe
             if (SplashActivity.himnoPlayer != null) {
                 if (SplashActivity.himnoPlayer.isPlaying()) {
                     SplashActivity.himnoPlayer.stop();
@@ -113,12 +112,11 @@ public class SonidosAdapter extends RecyclerView.Adapter<SonidoViewHolder> {
                 holder.controlView.setPlayer(sharedPlayer);
                 sharedPlayer.play();
 
-                // Notificamos para que la lista se repinte, quitando el cristal al nuevo y poniéndoselo al viejo
+                // Refrescamos la lista para mover el reproductor visual al ítem correcto
                 notifyDataSetChanged();
             }
         };
 
-        // Asignamos el clic tanto a la fila entera como a la capa invisible que hay sobre el botón
         holder.itemView.setOnClickListener(playClickListener);
         holder.capaClic.setOnClickListener(playClickListener);
     }
@@ -126,5 +124,20 @@ public class SonidosAdapter extends RecyclerView.Adapter<SonidoViewHolder> {
     @Override
     public int getItemCount() {
         return lista != null ? lista.size() : 0;
+    }
+
+    public static class SonidoViewHolder extends RecyclerView.ViewHolder {
+        public TextView tvTitulo;
+        public PlayerControlView controlView;
+        public SeekBar sbVolumen;
+        public View capaClic;
+
+        public SonidoViewHolder(@NonNull View itemView) {
+            super(itemView);
+            tvTitulo = itemView.findViewById(R.id.tvTituloSonido);
+            controlView = itemView.findViewById(R.id.exoController);
+            sbVolumen = itemView.findViewById(R.id.seekBarVolumen);
+            capaClic = itemView.findViewById(R.id.capaClic);
+        }
     }
 }

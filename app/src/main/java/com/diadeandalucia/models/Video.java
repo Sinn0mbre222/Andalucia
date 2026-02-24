@@ -2,7 +2,7 @@ package com.diadeandalucia.models;
 
 public class Video {
     private String titulo;
-    private int videoResId; // El ID del archivo en res/raw
+    private int videoResId;
 
     public Video(String titulo, int videoResId) {
         this.titulo = titulo;
